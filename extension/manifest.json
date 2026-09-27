@@ -1,0 +1,22 @@
+{
+  "manifest_version": 3,
+  "name": "Layout Preview",
+  "version": "1.0.0",
+  "description": "Responsive layout preview toolbar for local dev servers. Runs only on localhost; click the icon to toggle.",
+  "minimum_chrome_version": "111",
+  "permissions": ["scripting", "storage", "activeTab"],
+  "host_permissions": [
+    "http://localhost/*",
+    "https://localhost/*",
+    "http://*.localhost/*",
+    "https://*.localhost/*",
+    "http://127.0.0.1/*",
+    "https://127.0.0.1/*"
+  ],
+  "background": {
+    "service_worker": "service-worker.js"
+  },
+  "action": {
+    "default_title": "Toggle Layout Preview"
+  }
+}

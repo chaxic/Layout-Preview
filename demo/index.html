@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>layout-preview demo</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      color: #06273a;
+      background: #fff;
+      container: page / inline-size;
+    }
+    header, main { padding: 24px; }
+    header { background: #06273a; color: #fff; }
+    h1 { margin: 0 0 8px; font-size: 24px; }
+    .readout { font: 13px/1.5 ui-monospace, Consolas, monospace; }
+    .cards { display: grid; gap: 16px; grid-template-columns: 1fr; margin-top: 16px; }
+    .card { border-radius: 8px; padding: 16px; border: 1px solid #d0d7dc; }
+    .badge { display: inline-block; padding: 4px 8px; border-radius: 999px; font-size: 12px; font-weight: 600; }
+
+    /* Media query badge: reacts to the real viewport (iframe mode). */
+    .mq::after { content: "media: < 640px"; }
+    .mq { background: #fde2e2; }
+    @media (min-width: 640px) { .mq::after { content: "media: 640-1023px"; } .mq { background: #fff3cd; } }
+    @media (min-width: 1024px) { .mq::after { content: "media: >= 1024px"; } .mq { background: #d4edda; } }
+
+    /* Container query badge: reacts to <body> width (inline mode). */
+    .cq::after { content: "container: < 640px"; }
+    .cq { background: #fde2e2; }
+    @container page (min-width: 640px) {
+      .cq::after { content: "container: 640-1023px"; } .cq { background: #fff3cd; }
+      .cards { grid-template-columns: repeat(2, 1fr); }
+    }
+    @container page (min-width: 1024px) {
+      .cq::after { content: "container: >= 1024px"; } .cq { background: #d4edda; }
+      .cards { grid-template-columns: repeat(4, 1fr); }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>layout-preview demo</h1>
+    <p>Open the <strong>Layout</strong> toolbar (bottom right, or Alt+Shift+L). Compare the two badges in Inline and Iframe modes.</p>
+  </header>
+  <main>
+    <p><span class="badge mq"></span> <span class="badge cq"></span></p>
+    <p class="readout" id="readout">waiting for layoutpreview:change…</p>
+    <div class="cards">
+      <div class="card">Inline mode narrows &lt;body&gt;: container queries and JS using <code>LayoutPreview.width</code> respond.</div>
+      <div class="card">Iframe mode loads this page in a device-sized frame: <code>@media</code> queries respond too.</div>
+      <div class="card">Responsive uses the real window; resize the browser to test breakpoints.</div>
+      <div class="card">State is kept per tab in sessionStorage under the configured <code>storageKey</code>.</div>
+    </div>
+  </main>
+
+  <script>
+    window.addEventListener('layoutpreview:change', function (event) {
+      document.getElementById('readout').textContent =
+        'layoutpreview:change ' + JSON.stringify(event.detail) +
+        ' | innerWidth=' + window.innerWidth;
+    });
+  </script>
+  <script src="../dist/layout-preview.js" data-storage-key="layout-preview-demo" defer></script>
+</body>
+</html>
